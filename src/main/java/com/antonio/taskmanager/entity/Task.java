@@ -8,14 +8,25 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.antonio.taskmanager.enums.Priority;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tasks")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Task { 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @EqualsAndHashCode.Include
     private UUID id;
 
     @Column(nullable = false, length = 100)
@@ -25,6 +36,7 @@ public class Task {
     private String description;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean completed = false;
 
     @Column(nullable = true)
