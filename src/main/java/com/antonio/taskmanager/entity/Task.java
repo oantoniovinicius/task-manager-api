@@ -38,7 +38,7 @@ public class Task {
     private Priority priority;
 
     @CreationTimestamp
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     public TaskResponseDTO toDTO(Task task){
         TaskResponseDTO taskResponseDTO = new TaskResponseDTO();
