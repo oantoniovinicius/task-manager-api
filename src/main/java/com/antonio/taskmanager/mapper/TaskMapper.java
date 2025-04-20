@@ -25,7 +25,7 @@ public class TaskMapper {
                 task.getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
             );
         }
-        if(task.getDueDate() != null) {
+        if(task.getCreatedAt() != null) {
             taskResponseDTO.setCreatedAt(
                 task.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
             ); 
