@@ -2,6 +2,7 @@ package com.antonio.taskmanager.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -44,11 +45,21 @@ public class Task {
     
         taskResponseDTO.setId(task.getId());
         taskResponseDTO.setTitle(task.getTitle());
-        taskResponseDTO.setDescription(task.getDescription());
-        taskResponseDTO.setCreatedAt(task.getCreatedAt().toString());
+        taskResponseDTO.setDescription(
+            task.getDescription() != null ? task.getDescription() : "No description"
+        );
         taskResponseDTO.setCompleted(task.isCompleted());
-        taskResponseDTO.setDueDate(task.getDueDate().toString());
         taskResponseDTO.setPriority(task.getPriority());
+        if (task.getDueDate() != null) {
+            taskResponseDTO.setDueDate(
+                task.getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            );
+        }
+        if(task.getDueDate() != null) {
+            taskResponseDTO.setCreatedAt(
+                task.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+            ); 
+        }
 
         return taskResponseDTO;
     }
