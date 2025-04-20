@@ -2,14 +2,11 @@ package com.antonio.taskmanager.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
+import com.antonio.taskmanager.enums.Priority;
 
-import com.antonio.taskmanager.dto.TaskResponseDTO;
-
-import jakarta.annotation.Priority;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -39,28 +36,4 @@ public class Task {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    public TaskResponseDTO toDTO(Task task){
-        TaskResponseDTO taskResponseDTO = new TaskResponseDTO();
-    
-        taskResponseDTO.setId(task.getId());
-        taskResponseDTO.setTitle(task.getTitle());
-        taskResponseDTO.setDescription(
-            task.getDescription() != null ? task.getDescription() : "No description"
-        );
-        taskResponseDTO.setCompleted(task.isCompleted());
-        taskResponseDTO.setPriority(task.getPriority());
-        if (task.getDueDate() != null) {
-            taskResponseDTO.setDueDate(
-                task.getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            );
-        }
-        if(task.getDueDate() != null) {
-            taskResponseDTO.setCreatedAt(
-                task.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
-            ); 
-        }
-
-        return taskResponseDTO;
-    }
 }

@@ -12,9 +12,7 @@ import com.antonio.taskmanager.mapper.TaskMapper;
 
 @Service
 public class TaskService {
-    
     private final TaskRepository taskRepository;
-
     private final TaskMapper taskMapper;
 
     public TaskService (TaskRepository taskRepository, TaskMapper taskMapper){ 

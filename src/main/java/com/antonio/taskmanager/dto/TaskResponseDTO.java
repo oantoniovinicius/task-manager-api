@@ -2,7 +2,7 @@ package com.antonio.taskmanager.dto;
 
 import java.util.UUID;
 
-import jakarta.annotation.Priority;
+import com.antonio.taskmanager.enums.Priority;
 import lombok.Data;
 
 @Data
