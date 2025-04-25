@@ -12,12 +12,14 @@ import com.antonio.taskmanager.service.TaskService;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.antonio.taskmanager.dto.*;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -48,5 +50,11 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> getTaskByID(@PathVariable UUID id) {
+        logger.info("Received request to get task by ID");
+        TaskResponseDTO task = taskService.getTaskById(id);
+        return ResponseEntity.ok(task);
+    }
     
 }

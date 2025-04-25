@@ -8,6 +8,7 @@ import com.antonio.taskmanager.repository.TaskRepository;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -45,5 +46,12 @@ public class TaskService {
         return tasks.stream()
                 .map(taskMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public TaskResponseDTO getTaskById (UUID id){
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
+        logger.info("Task found with ID: {}", task.getId());
+        return taskMapper.toDTO(task);
     }
 }   
