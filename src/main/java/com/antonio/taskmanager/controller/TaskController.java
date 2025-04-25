@@ -11,10 +11,15 @@ import com.antonio.taskmanager.service.TaskService;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.antonio.taskmanager.dto.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/tasks")
@@ -32,7 +37,16 @@ public class TaskController {
 
         TaskResponseDTO responseDTO = taskService.createTask(taskRequestDTO);
         logger.debug("Task created successfully: {}", responseDTO);
-        
+
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
+
+    @GetMapping()
+    public ResponseEntity<List<TaskResponseDTO>> getAllTasks() {
+        logger.info("Received request to get all tasks");
+        List<TaskResponseDTO> tasks = taskService.getAllTasks();
+        return ResponseEntity.ok(tasks);
+    }
+
+    
 }

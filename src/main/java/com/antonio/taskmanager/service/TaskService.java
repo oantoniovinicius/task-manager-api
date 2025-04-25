@@ -7,6 +7,9 @@ import com.antonio.taskmanager.repository.TaskRepository;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +36,14 @@ public class TaskService {
 
         Task savedTask = taskRepository.save(task);
         logger.info("Task saved with ID: {}", savedTask.getId());
-        
+
         return taskMapper.toDTO(savedTask); 
+    }
+
+    public List<TaskResponseDTO> getAllTasks() {
+        List<Task> tasks = taskRepository.findAll();
+        return tasks.stream()
+                .map(taskMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }   
