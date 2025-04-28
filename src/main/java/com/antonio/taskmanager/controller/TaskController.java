@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.antonio.taskmanager.dto.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
@@ -56,5 +56,11 @@ public class TaskController {
         TaskResponseDTO task = taskService.getTaskById(id);
         return ResponseEntity.ok(task);
     }
-    
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable UUID id, @RequestBody @Valid TaskRequestDTO taskRequestDTO) {
+        logger.info("Received request to update task with ID: {}", id);
+        TaskResponseDTO task = taskService.updateTask(id, taskRequestDTO);
+        return ResponseEntity.ok(task);
+    }
 }

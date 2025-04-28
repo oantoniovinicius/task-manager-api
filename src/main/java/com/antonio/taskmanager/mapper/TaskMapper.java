@@ -30,6 +30,11 @@ public class TaskMapper {
                 task.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
             ); 
         }
+        if(task.getUpdatedAt() != null) {
+            taskResponseDTO.setUpdatedAt(
+                task.getUpdatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+            );
+        }
 
         return taskResponseDTO;
     }    
