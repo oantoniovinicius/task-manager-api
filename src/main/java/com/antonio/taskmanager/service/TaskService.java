@@ -1,6 +1,5 @@
 package com.antonio.taskmanager.service;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.antonio.taskmanager.dto.*;
@@ -77,6 +76,32 @@ public class TaskService {
         
         task.setUpdatedAt(LocalDateTime.now());
 
+        Task updatedTask = taskRepository.save(task);
+        logger.info("Task updated with ID: {}", updatedTask.getId());
+
+        return taskMapper.toDTO(updatedTask);
+    }
+
+    public void deleteTask (UUID id){
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
+        logger.info("Task found with ID: {}", task.getId());
+
+        taskRepository.delete(task);    
+        logger.info("Task deleted with ID: {}", task.getId());
+    }
+
+    public TaskResponseDTO patchTask (UUID id, @Valid TaskPatchDTO dto){
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
+        logger.info("Task found with ID: {}", task.getId());
+
+        if(dto.getTitle() != null) task.setTitle(dto.getTitle());
+        if(dto.getDescription() != null) task.setDescription(dto.getDescription());
+        if(dto.getDueDate() != null) task.setDueDate(dto.getDueDate());
+        if (dto.getPriority() != null) task.setPriority(dto.getPriority());
+
+        task.setUpdatedAt(LocalDateTime.now());
         Task updatedTask = taskRepository.save(task);
         logger.info("Task updated with ID: {}", updatedTask.getId());
 
