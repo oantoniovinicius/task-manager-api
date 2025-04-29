@@ -14,4 +14,5 @@ public class TaskResponseDTO {
     private String dueDate;
     private Priority priority;
     private String createdAt;
+    private String updatedAt;
 }

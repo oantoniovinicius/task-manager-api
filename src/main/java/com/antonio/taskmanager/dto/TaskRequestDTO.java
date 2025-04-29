@@ -9,7 +9,6 @@ import lombok.Data;
 
 @Data
 public class TaskRequestDTO {
-
     @NotBlank(message = "The task title is required and cannot be empty")
     @Size(max = 100)
     private String title;
