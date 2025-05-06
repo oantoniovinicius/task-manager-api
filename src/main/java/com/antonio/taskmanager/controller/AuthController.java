@@ -1,5 +1,7 @@
 package com.antonio.taskmanager.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,10 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.antonio.taskmanager.dto.AuthRequestDTO;
 import com.antonio.taskmanager.dto.AuthResponseDTO;
+import com.antonio.taskmanager.entity.User;
 import com.antonio.taskmanager.service.AuthService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -28,4 +34,10 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> login(@RequestBody @Valid AuthRequestDTO request) {
         return ResponseEntity.ok(authService.login(request));
     }
+
+    @GetMapping("/admin/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(authService.getAllUsers());
+    }
+    
 }
