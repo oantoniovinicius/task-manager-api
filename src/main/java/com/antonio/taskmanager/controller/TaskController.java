@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
@@ -61,7 +60,8 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable UUID id, @RequestBody @Valid TaskRequestDTO taskRequestDTO) {
+    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable UUID id,
+            @RequestBody @Valid TaskRequestDTO taskRequestDTO) {
         logger.info("Received request to update task with ID: {}", id);
         TaskResponseDTO task = taskService.updateTask(id, taskRequestDTO);
         return ResponseEntity.ok(task);
