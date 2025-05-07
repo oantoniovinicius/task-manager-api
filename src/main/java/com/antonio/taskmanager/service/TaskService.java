@@ -24,13 +24,12 @@ public class TaskService {
     private final TaskMapper taskMapper;
     private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
-
-    public TaskService (TaskRepository taskRepository, TaskMapper taskMapper){ 
+    public TaskService(TaskRepository taskRepository, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
         this.taskMapper = taskMapper;
     }
 
-    public TaskResponseDTO createTask (@Valid TaskRequestDTO dto){
+    public TaskResponseDTO createTask(@Valid TaskRequestDTO dto) {
         logger.info("Creating a new task with title: {}", dto.getTitle());
 
         Task task = taskMapper.toEntity(dto);
@@ -39,7 +38,7 @@ public class TaskService {
         Task savedTask = taskRepository.save(task);
         logger.info("Task saved with ID: {}", savedTask.getId());
 
-        return taskMapper.toDTO(savedTask); 
+        return taskMapper.toDTO(savedTask);
     }
 
     public List<TaskResponseDTO> getAllTasks() {
@@ -49,31 +48,31 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public TaskResponseDTO getTaskById (UUID id){
+    public TaskResponseDTO getTaskById(UUID id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
         logger.info("Task found with ID: {}", task.getId());
         return taskMapper.toDTO(task);
     }
 
-    public TaskResponseDTO updateTask (UUID id, @Valid TaskRequestDTO dto){
+    public TaskResponseDTO updateTask(UUID id, @Valid TaskRequestDTO dto) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
         logger.info("Task found with ID: {}", task.getId());
 
-        if(dto.getTitle() != null){
+        if (dto.getTitle() != null) {
             task.setTitle(dto.getTitle());
         }
-        if(dto.getDescription() != null){
+        if (dto.getDescription() != null) {
             task.setDescription(dto.getDescription());
         }
-        if(dto.getDueDate() != null){
+        if (dto.getDueDate() != null) {
             task.setDueDate(dto.getDueDate());
         }
-        if(dto.getPriority() != null){
+        if (dto.getPriority() != null) {
             task.setPriority(dto.getPriority());
         }
-        
+
         task.setUpdatedAt(LocalDateTime.now());
 
         Task updatedTask = taskRepository.save(task);
@@ -82,24 +81,28 @@ public class TaskService {
         return taskMapper.toDTO(updatedTask);
     }
 
-    public void deleteTask (UUID id){
+    public void deleteTask(UUID id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
         logger.info("Task found with ID: {}", task.getId());
 
-        taskRepository.delete(task);    
+        taskRepository.delete(task);
         logger.info("Task deleted with ID: {}", task.getId());
     }
 
-    public TaskResponseDTO patchTask (UUID id, @Valid TaskPatchDTO dto){
+    public TaskResponseDTO patchTask(UUID id, @Valid TaskPatchDTO dto) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
         logger.info("Task found with ID: {}", task.getId());
 
-        if(dto.getTitle() != null) task.setTitle(dto.getTitle());
-        if(dto.getDescription() != null) task.setDescription(dto.getDescription());
-        if(dto.getDueDate() != null) task.setDueDate(dto.getDueDate());
-        if (dto.getPriority() != null) task.setPriority(dto.getPriority());
+        if (dto.getTitle() != null)
+            task.setTitle(dto.getTitle());
+        if (dto.getDescription() != null)
+            task.setDescription(dto.getDescription());
+        if (dto.getDueDate() != null)
+            task.setDueDate(dto.getDueDate());
+        if (dto.getPriority() != null)
+            task.setPriority(dto.getPriority());
 
         task.setUpdatedAt(LocalDateTime.now());
         Task updatedTask = taskRepository.save(task);
@@ -107,4 +110,4 @@ public class TaskService {
 
         return taskMapper.toDTO(updatedTask);
     }
-}   
+}

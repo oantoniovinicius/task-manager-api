@@ -10,36 +10,32 @@ import com.antonio.taskmanager.entity.Task;
 
 @Component
 public class TaskMapper {
-    public TaskResponseDTO toDTO(Task task){
+    public TaskResponseDTO toDTO(Task task) {
         TaskResponseDTO taskResponseDTO = new TaskResponseDTO();
-    
+
         taskResponseDTO.setId(task.getId());
         taskResponseDTO.setTitle(task.getTitle());
         taskResponseDTO.setDescription(
-            task.getDescription() != null ? task.getDescription() : "No description"
-        );
+                task.getDescription() != null ? task.getDescription() : "No description");
         taskResponseDTO.setCompleted(task.isCompleted());
         taskResponseDTO.setPriority(task.getPriority());
         if (task.getDueDate() != null) {
             taskResponseDTO.setDueDate(
-                task.getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            );
+                    task.getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }
-        if(task.getCreatedAt() != null) {
+        if (task.getCreatedAt() != null) {
             taskResponseDTO.setCreatedAt(
-                task.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
-            ); 
+                    task.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         }
-        if(task.getUpdatedAt() != null) {
+        if (task.getUpdatedAt() != null) {
             taskResponseDTO.setUpdatedAt(
-                task.getUpdatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
-            );
+                    task.getUpdatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         }
 
         return taskResponseDTO;
-    }    
+    }
 
-    public Task toEntity(TaskRequestDTO dto){
+    public Task toEntity(TaskRequestDTO dto) {
         Task task = new Task();
 
         task.setTitle(dto.getTitle());

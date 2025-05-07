@@ -1,13 +1,13 @@
 package com.antonio.taskmanager.service;
 
-
 import org.springframework.stereotype.Service;
 
 import com.antonio.taskmanager.enums.Role;
+import com.antonio.taskmanager.mapper.UserMapper;
 import com.antonio.taskmanager.dto.AuthRequestDTO;
 import com.antonio.taskmanager.dto.AuthResponseDTO;
-import com.antonio.taskmanager.dto.TaskResponseDTO;
-import com.antonio.taskmanager.entity.Task;
+import com.antonio.taskmanager.dto.UserResponseDTO;
+
 import com.antonio.taskmanager.entity.User;
 import com.antonio.taskmanager.repository.UserRepository;
 
@@ -30,27 +30,24 @@ public class AuthService {
     private final JwtService jwtService;
     private final UserMapper userMapper;
 
-    public AuthResponseDTO register(AuthRequestDTO request){
+    public AuthResponseDTO register(AuthRequestDTO request) {
         // creating new user
-        User user = User.builder().
-                username(request.getEmail().split("@")[0]).
-                email(request.getEmail()).
-                password(passwordEncoder.encode(request.getPassword())).
-                role(Role.USER).
-                build();
-        
+        User user = User.builder().username(request.getEmail().split("@")[0]).email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword())).role(Role.USER).build();
+
         userRepository.save(user);
 
         // generating JWT token
         String token = jwtService.generateToken(user);
 
-        return new AuthResponseDTO(token, "Bearer", user.getId(), user.getEmail(), user.getUsername(), user.getRole().name());
+        return new AuthResponseDTO(token, "Bearer", user.getId(), user.getEmail(), user.getUsername(),
+                user.getRole().name());
     }
 
     public AuthResponseDTO login(AuthRequestDTO request) {
         // find user
         User user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         // verify password
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -60,10 +57,11 @@ public class AuthService {
         // generate JWT token
         String token = jwtService.generateToken(user);
 
-        return new AuthResponseDTO(token, "Bearer", user.getId(), user.getEmail(), user.getUsername(), user.getRole().name());
+        return new AuthResponseDTO(token, "Bearer", user.getId(), user.getEmail(), user.getUsername(),
+                user.getRole().name());
     }
 
-    public List<TaskResponseDTO> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream()
                 .map(userMapper::toDTO)
