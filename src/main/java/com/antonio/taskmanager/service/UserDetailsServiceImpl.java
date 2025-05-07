@@ -1,9 +1,8 @@
-package com.antonio.taskmanager.security;
+package com.antonio.taskmanager.service;
 
 import com.antonio.taskmanager.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

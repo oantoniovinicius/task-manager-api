@@ -12,7 +12,7 @@ import com.antonio.taskmanager.entity.User;
 import com.antonio.taskmanager.repository.UserRepository;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
@@ -66,5 +66,11 @@ public class AuthService {
         return users.stream()
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public User getCurrentUser() { // get the current user who logged in
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
