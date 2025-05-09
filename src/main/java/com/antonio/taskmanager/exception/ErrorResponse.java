@@ -8,7 +8,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ErrorResponse {
+    private LocalDateTime timestamp;
     private int status;
+    private String error;
     private String message;
-    private LocalDateTime timeStamp;
+    private String path;
 }
