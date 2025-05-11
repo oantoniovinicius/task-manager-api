@@ -27,7 +27,7 @@ import com.antonio.taskmanager.mapper.TaskMapper;
 public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
-    private final AuthService authService;
+    private final UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
     public TaskResponseDTO createTask(@Valid TaskRequestDTO dto) {
@@ -36,7 +36,7 @@ public class TaskService {
         Task task = taskMapper.toEntity(dto);
         logger.debug("Entity created: {}", task);
 
-        User currentUser = authService.getCurrentUser();
+        User currentUser = userService.getCurrentUser();
         task.setUser(currentUser);
 
         Task savedTask = taskRepository.save(task);
@@ -46,7 +46,7 @@ public class TaskService {
     }
 
     public List<TaskResponseDTO> getAllTasks() {
-        User currentUser = authService.getCurrentUser();
+        User currentUser = userService.getCurrentUser();
 
         List<Task> tasks;
         if (currentUser.getRole() == Role.ADMIN) { // admin can see all tasks
@@ -66,7 +66,7 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
         logger.info("Task found with ID: {}", task.getId());
 
-        User currentUser = authService.getCurrentUser(); // get the current user
+        User currentUser = userService.getCurrentUser(); // get the current user
         if (!task.getUser().getId().equals(currentUser.getId())) { // this line checks if the task belongs to the
                                                                    // current user
             throw new RuntimeException("You do not have permission to access this task");
@@ -80,7 +80,7 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
         logger.info("Task found with ID: {}", task.getId());
 
-        User currentUser = authService.getCurrentUser();
+        User currentUser = userService.getCurrentUser();
         if (!task.getUser().getId().equals(currentUser.getId())) {
             throw new AccessDeniedException("You do not have access to this task");
         }
@@ -111,7 +111,7 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
         logger.info("Task found with ID: {}", task.getId());
 
-        User currentUser = authService.getCurrentUser();
+        User currentUser = userService.getCurrentUser();
         if (!task.getUser().getId().equals(currentUser.getId())) {
             throw new AccessDeniedException("You do not have access to this task");
         }
@@ -125,7 +125,7 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found with ID: " + id));
         logger.info("Task found with ID: {}", task.getId());
 
-        User currentUser = authService.getCurrentUser();
+        User currentUser = userService.getCurrentUser();
         if (!task.getUser().getId().equals(currentUser.getId())) {
             throw new AccessDeniedException("You do not have access to this task");
         }

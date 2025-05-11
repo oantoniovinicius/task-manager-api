@@ -1,9 +1,7 @@
 package com.antonio.taskmanager.controller;
 
-import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,21 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.antonio.taskmanager.dto.AuthRequestDTO;
 import com.antonio.taskmanager.dto.AuthResponseDTO;
-import com.antonio.taskmanager.dto.UserResponseDTO;
-import com.antonio.taskmanager.entity.User;
-import com.antonio.taskmanager.mapper.UserMapper;
 import com.antonio.taskmanager.service.AuthService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final UserMapper userMapper;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDTO> register(@RequestBody @Valid AuthRequestDTO request) {
@@ -36,17 +29,4 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> login(@RequestBody @Valid AuthRequestDTO request) {
         return ResponseEntity.ok(authService.login(request));
     }
-
-    @GetMapping("/me")
-    public ResponseEntity<UserResponseDTO> getCurrentUser() {
-        User user = authService.getCurrentUser();
-        return ResponseEntity.ok(userMapper.toDTO(user));
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin/users")
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-        return ResponseEntity.ok(authService.getAllUsers());
-    }
-
 }
