@@ -1,26 +1,16 @@
 package com.antonio.taskmanager.service;
 
-import org.springframework.stereotype.Service;
-
 import com.antonio.taskmanager.enums.Role;
 import com.antonio.taskmanager.exception.UserAlreadyExistsException;
 import com.antonio.taskmanager.exception.UserNotFoundException;
-import com.antonio.taskmanager.mapper.UserMapper;
 import com.antonio.taskmanager.dto.AuthRequestDTO;
 import com.antonio.taskmanager.dto.AuthResponseDTO;
-import com.antonio.taskmanager.dto.UserResponseDTO;
-
 import com.antonio.taskmanager.entity.User;
 import com.antonio.taskmanager.repository.UserRepository;
 
+import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.security.authentication.BadCredentialsException;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,7 +19,6 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final UserMapper userMapper;
 
     public AuthResponseDTO register(AuthRequestDTO request) {
         // check if email already exists
@@ -65,18 +54,5 @@ public class AuthService {
 
         return new AuthResponseDTO(token, "Bearer", user.getId(), user.getEmail(), user.getUsername(),
                 user.getRole().name());
-    }
-
-    public List<UserResponseDTO> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(userMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    public User getCurrentUser() { // get the current user who logged in
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Authenticated User not found"));
     }
 }
