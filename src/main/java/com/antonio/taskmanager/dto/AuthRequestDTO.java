@@ -2,9 +2,13 @@ package com.antonio.taskmanager.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthRequestDTO {
     @Email(message = "The email must be a valid email address")
     @NotBlank(message = "The email is required and cannot be empty")

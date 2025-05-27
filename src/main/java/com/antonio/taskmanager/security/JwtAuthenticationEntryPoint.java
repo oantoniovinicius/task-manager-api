@@ -3,6 +3,7 @@ package com.antonio.taskmanager.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -16,12 +17,15 @@ import java.util.Map;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
+    private final ObjectMapper objectMapper;
 
     @Override
     public void commence(HttpServletRequest request,
-            HttpServletResponse response,
-            AuthenticationException authException) throws IOException {
+                         HttpServletResponse response,
+                         AuthenticationException authException) throws IOException {
 
         log.warn("Unauthorized access: {}", authException.getMessage());
 
@@ -35,6 +39,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         body.put("message", "Invalid or missing token");
         body.put("path", request.getRequestURI());
 
-        new ObjectMapper().writeValue(response.getOutputStream(), body);
+        objectMapper.writeValue(response.getOutputStream(), body);
     }
 }

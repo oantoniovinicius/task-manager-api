@@ -29,9 +29,16 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // release register and login
-                        .requestMatchers("/auth/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()) // protects the rest
+                .requestMatchers(
+                        "/auth/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/v3/api-docs.yaml",
+                        "/v3/api-docs/swagger-config"
+                ).permitAll()
+                .requestMatchers("/auth/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authenticationEntryPoint))
                 .sessionManagement(sess -> sess

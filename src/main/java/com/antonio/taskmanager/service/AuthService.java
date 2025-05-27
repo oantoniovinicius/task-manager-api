@@ -3,8 +3,10 @@ package com.antonio.taskmanager.service;
 import com.antonio.taskmanager.enums.Role;
 import com.antonio.taskmanager.exception.UserAlreadyExistsException;
 import com.antonio.taskmanager.exception.UserNotFoundException;
+import com.antonio.taskmanager.mapper.UserMapper;
 import com.antonio.taskmanager.dto.AuthRequestDTO;
 import com.antonio.taskmanager.dto.AuthResponseDTO;
+import com.antonio.taskmanager.dto.UserResponseDTO;
 import com.antonio.taskmanager.entity.User;
 import com.antonio.taskmanager.repository.UserRepository;
 
@@ -19,6 +21,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserMapper userMapper;
 
     public AuthResponseDTO register(AuthRequestDTO request) {
         // check if email already exists
@@ -32,11 +35,12 @@ public class AuthService {
 
         userRepository.save(user);
 
+        UserResponseDTO dto = userMapper.toDTO(user);
+
         // generating JWT token
         String token = jwtService.generateToken(user);
 
-        return new AuthResponseDTO(token, "Bearer", user.getId(), user.getEmail(), user.getUsername(),
-                user.getRole().name());
+        return new AuthResponseDTO(token, "Bearer", dto);
     }
 
     public AuthResponseDTO login(AuthRequestDTO request) {
@@ -49,10 +53,11 @@ public class AuthService {
             throw new BadCredentialsException("Invalid password");
         }
 
+        UserResponseDTO dto = userMapper.toDTO(user);
+
         // generate JWT token
         String token = jwtService.generateToken(user);
 
-        return new AuthResponseDTO(token, "Bearer", user.getId(), user.getEmail(), user.getUsername(),
-                user.getRole().name());
+        return new AuthResponseDTO(token, "Bearer", dto);
     }
 }
